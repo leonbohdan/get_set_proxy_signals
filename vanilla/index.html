@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evolution of Reactivity - Vanilla Lab</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f6f8fb;
+      padding: 24px;
+      color: #1f2a44;
+    }
+    h1 {
+      margin-bottom: 8px;
+    }
+    .lab-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+    .panel {
+      background: #fff;
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    }
+    button {
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: none;
+      background: #1976d2;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    button:hover {
+      background: #115293;
+    }
+    .red-button {
+      background-color: #ff4444;
+      color: white;
+    }
+    .metrics {
+      margin-top: 12px;
+      display: grid;
+      gap: 6px;
+    }
+    .metric-label {
+      font-weight: bold;
+    }
+    .teacher-comment {
+      margin-top: 10px;
+      background: #eef6ff;
+      border-left: 4px solid #1976d2;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Evolution of Reactivity</h1>
+  <p>Click each button to increment. Watch renders and computation time. The Signals engine should do fewer class updates until the threshold is crossed.</p>
+
+  <div class="lab-grid">
+    <div class="panel" id="panel-getter">
+      <h2>Engine A: Getters/Setters (ES5)</h2>
+      <button id="btn-getter">Count: <span class="count">0</span></button>
+      <div class="metrics">
+        <div><span class="metric-label">Render Count:</span> <span class="render-count">0</span></div>
+        <div><span class="metric-label">Class Updates:</span> <span class="class-count">0</span></div>
+        <div><span class="metric-label">Last Computation Time:</span> <span class="time">0</span> ms</div>
+      </div>
+      <div class="teacher-comment">Teacher Comment: Watchers fire on every write, so the class effect runs even when the computed value (isTooBig) stays false.</div>
+    </div>
+
+    <div class="panel" id="panel-proxy">
+      <h2>Engine B: Proxy (ES6)</h2>
+      <button id="btn-proxy">Count: <span class="count">0</span></button>
+      <div class="metrics">
+        <div><span class="metric-label">Render Count:</span> <span class="render-count">0</span></div>
+        <div><span class="metric-label">Class Updates:</span> <span class="class-count">0</span></div>
+        <div><span class="metric-label">Last Computation Time:</span> <span class="time">0</span> ms</div>
+      </div>
+      <div class="teacher-comment">Teacher Comment: Proxy makes reactivity ergonomic, but our naive subscriber still runs every time; no fine-grained guard.</div>
+    </div>
+
+    <div class="panel" id="panel-signals">
+      <h2>Engine C: Signals (Fine-Grained)</h2>
+      <button id="btn-signals">Count: <span class="count">0</span></button>
+      <div class="metrics">
+        <div><span class="metric-label">Render Count:</span> <span class="render-count">0</span></div>
+        <div><span class="metric-label">Class Updates:</span> <span class="class-count">0</span></div>
+        <div><span class="metric-label">Last Computation Time:</span> <span class="time">0</span> ms</div>
+      </div>
+      <div class="teacher-comment">Teacher Comment: Computed skips notifying dependents when the value is unchanged. The class effect is silent from counts 0-10 and only fires when it flips to true.</div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { engines } from './reactivity-engines.js';
+
+    function bindEngine(panelId, engineKey) {
+      const panel = document.getElementById(panelId);
+      const button = panel.querySelector('button');
+      const countSpan = panel.querySelector('.count');
+      const renderSpan = panel.querySelector('.render-count');
+      const classSpan = panel.querySelector('.class-count');
+      const timeSpan = panel.querySelector('.time');
+
+      const engine = engines[engineKey](
+        (value, total, classUpdates) => {
+          countSpan.textContent = value;
+          renderSpan.textContent = total;
+          classSpan.textContent = classUpdates;
+        },
+        (isTooBig, total, classUpdates) => {
+          if (isTooBig) {
+            button.classList.add('red-button');
+          } else {
+            button.classList.remove('red-button');
+          }
+          renderSpan.textContent = total;
+          classSpan.textContent = classUpdates;
+        }
+      );
+
+      button.addEventListener('click', () => {
+        const start = performance.now();
+        engine.increment();
+        const end = performance.now();
+        timeSpan.textContent = (end - start).toFixed(3);
+      });
+    }
+
+    bindEngine('panel-getter', 'GetterSetter');
+    bindEngine('panel-proxy', 'Proxy');
+    bindEngine('panel-signals', 'Signals');
+  </script>
+</body>
+</html>

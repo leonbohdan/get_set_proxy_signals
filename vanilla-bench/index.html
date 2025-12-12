@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Reactivity Bench</title>
+    <style>
+      :root {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #0f172a;
+        background: #f8fafc;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .shell {
+        max-width: 900px;
+        margin: 32px auto;
+        padding: 0 16px 40px;
+      }
+      h1 {
+        margin-bottom: 4px;
+      }
+      .lead {
+        color: #475569;
+        margin-top: 0;
+        margin-bottom: 16px;
+      }
+      button {
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      button:hover {
+        background: #1d4ed8;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 16px;
+        margin-top: 20px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 16px;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+      }
+      .card h2 {
+        margin: 0 0 6px;
+        font-size: 18px;
+      }
+      .note {
+        color: #475569;
+        font-size: 13px;
+        margin: 0 0 8px;
+      }
+      .metrics {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px 12px;
+        margin-top: 10px;
+      }
+      .label {
+        color: #0f172a;
+        font-weight: 600;
+      }
+      .value {
+        color: #0f172a;
+      }
+      .mono {
+        font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <h1>Reactivity Bench</h1>
+      <p class="lead">
+        Compare ES5 <code>Object.defineProperty</code> vs ES6 <code>Proxy</code> vs modern
+        signals. Render count shows over-reactivity; JS time shows pure JS cost.
+      </p>
+
+      <button id="run-all">Run 1,000 updates</button>
+
+      <div class="grid">
+        <section class="card" data-section="legacy">
+          <h2>Legacy defineProperty</h2>
+          <p class="note">
+            Cannot see added keys; shallow only. Good to reveal the limitation.
+          </p>
+          <div class="metrics">
+            <span class="label">Final Value</span>
+            <span class="value mono" data-final>—</span>
+
+            <span class="label">Render Count</span>
+            <span class="value mono" data-render>—</span>
+
+            <span class="label">JS Time (ms)</span>
+            <span class="value mono" data-js-time>—</span>
+          </div>
+        </section>
+
+        <section class="card" data-section="proxy">
+          <h2>Proxy (deep)</h2>
+          <p class="note">
+            Sees new keys and nested objects thanks to the get/set traps.
+          </p>
+          <div class="metrics">
+            <span class="label">Final Value</span>
+            <span class="value mono" data-final>—</span>
+
+            <span class="label">Render Count</span>
+            <span class="value mono" data-render>—</span>
+
+            <span class="label">JS Time (ms)</span>
+            <span class="value mono" data-js-time>—</span>
+          </div>
+        </section>
+
+        <section class="card" data-section="signals">
+          <h2>Signals (fine-grained)</h2>
+          <p class="note">
+            Signal getter subscribes, setter notifies. Effects re-run only when
+            their dependencies change.
+          </p>
+          <div class="metrics">
+            <span class="label">Final Value</span>
+            <span class="value mono" data-final>—</span>
+
+            <span class="label">Render Count</span>
+            <span class="value mono" data-render>—</span>
+
+            <span class="label">JS Time (ms)</span>
+            <span class="value mono" data-js-time>—</span>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
+
