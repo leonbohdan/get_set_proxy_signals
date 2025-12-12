@@ -1,12 +1,18 @@
 /**
- * Example 2: Getter/Setter Pattern (Object with get/set)
- * Description: Using get/set accessors on object to automatically trigger re-rendering
+ * Example 3.2: Vue 3 ref (from CDN)
+ * Description: Using Vue 3's ref system for reactivity
  * 
- * This example is a simple implementation of the getter/setter pattern.
- * Using in Vue 2.
+ * This example uses the real Vue 3 ref implementation from CDN.
+ * Vue 3 uses Proxy under the hood for reactivity.
+ * 
+ * import { ref } from 'vue';
  */
 
 export function init(counterButton, resetButton) {
+  const { ref, watchEffect } = Vue;
+
+  const counterState = ref(0);
+
   function isCounterTooBig() {
     return counterState.value > 10;
   }
@@ -16,23 +22,13 @@ export function init(counterButton, resetButton) {
     counterButton.classList.toggle('red', isCounterTooBig());
   }
 
-  const counterState = {
-    _value: 0,
-
-    get value() {
-      return this._value;
-    },
-
-    set value(newValue) {
-      this._value = newValue;
-      renderCounter();
-    },
-  };
-
-  renderCounter();
+  // Vue's watchEffect automatically tracks dependencies
+  const stopEffect = watchEffect(() => {
+    renderCounter();
+  });
 
   counterButton.addEventListener('click', () => {
-    counterState.value = counterState.value + 1;
+    counterState.value += 1;
   });
 
   resetButton.addEventListener('click', () => {
@@ -46,6 +42,6 @@ export function init(counterButton, resetButton) {
   // Cleanup function
   return () => {
     clearInterval(interval);
+    stopEffect(); // Stop watching for changes
   };
 }
-

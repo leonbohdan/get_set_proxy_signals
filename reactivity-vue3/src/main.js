@@ -2,7 +2,10 @@
 import * as example01 from './examples/01-basic_01.js';
 import * as example01_01 from './examples/01-basic_02.js';
 import * as example02 from './examples/02-getter-setter_01.js';
-import * as example03 from './examples/03-proxy.js';
+import * as example03_01 from './examples/03-proxy_01.js';
+import * as example03_02 from './examples/03-proxy_02.js';
+import * as example03_03 from './examples/03-proxy_03.js';
+import * as example03_04 from './examples/03-proxy_04.js';
 import * as example04 from './examples/04-signal.js';
 
 const counterButton = document.querySelector('button#counter');
@@ -13,7 +16,10 @@ const examples = [
   { name: '01 - Basic (Manual)', module: example01 },
   { name: '01.1 - Basic with useCounter', module: example01_01 },
   { name: '02 - Getter/Setter', module: example02 },
-  { name: '03 - Proxy', module: example03 },
+  { name: '03 - Proxy', module: example03_01 },
+  { name: '03.1 - ref() Implementation', module: example03_02 },
+  { name: '03.2 - Vue 3 ref (CDN)', module: example03_03 },
+  { name: '03.3 - Fine-grained (Vue 3)', module: example03_04 },
   { name: '04 - Signal', module: example04 },
 ];
 
@@ -71,7 +77,3 @@ document.addEventListener('keydown', (e) => {
     loadExample(prevIndex);
   }
 });
-
-console.log('🎯 Demo Controls:');
-console.log('  → or "n" - Next example');
-console.log('  ← or "p" - Previous example');
