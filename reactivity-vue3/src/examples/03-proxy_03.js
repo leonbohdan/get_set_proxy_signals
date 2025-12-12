@@ -18,6 +18,7 @@ export function init(counterButton, resetButton) {
   }
 
   function renderCounter() {
+    console.log('  📝 renderCounter: Updating counter text and color');
     counterButton.textContent = `Counter: ${counterState.value}`;
     counterButton.classList.toggle('red', isCounterTooBig());
   }
