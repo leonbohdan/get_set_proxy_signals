@@ -11,7 +11,7 @@
 export function init(counterButton, resetButton) {
   const { ref, watchEffect } = Vue;
 
-  const counterState = ref(0);
+  const counterState = ref(5);
 
   function isCounterTooBig() {
     return counterState.value > 10;

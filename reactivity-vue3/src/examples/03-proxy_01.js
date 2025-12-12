@@ -58,7 +58,7 @@ export function init(counterButton, resetButton) {
     counterButton.classList.toggle('red', isCounterTooBig());
   }
 
-  const state = createReactive({ counter: 0 });
+  const state = createReactive({ counter: 5 });
 
   // Auto-track dependencies when accessing state.counter
   watchEffect(renderCounter);

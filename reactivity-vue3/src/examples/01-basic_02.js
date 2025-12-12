@@ -9,7 +9,7 @@
 
 export function init(counterButton, resetButton) {
   function useCounter() {
-    let counter = 0;
+    let counter = 5;
 
     function renderCounter() {
       counterButton.textContent = `Counter: ${counter}`;

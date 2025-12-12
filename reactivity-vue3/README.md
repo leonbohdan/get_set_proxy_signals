@@ -78,10 +78,51 @@ Demonstrating fine-grained reactivity with Vue 3.
 - Text updates on every counter change
 
 ### 04 - Signal
-Signal-based reactivity (like Solid.js).
-- Explicit reactive primitives
-- Subscription-based updates
-- Functional approach
+Signal-based reactivity (Solid.js style).
+- **createSignal()** - creates reactive state with [getter, setter]
+- **createEffect()** - automatically tracks dependencies and re-runs
+- **createMemo()** - cached computed values (like Vue's computed)
+- Function-based API: `counter()` to read, `setCounter(x)` to write
+- Automatic dependency tracking in effects
+- Fine-grained updates like Solid.js
+
+## 💡 Understanding Signals
+
+Signals use a **function-based API** that's different from other approaches:
+
+```javascript
+// Create a signal
+const [count, setCount] = createSignal(0);
+
+// Read value - call as function
+console.log(count()); // 0
+
+// Write value - call setter
+setCount(5);
+
+// Computed value (memo)
+const doubled = createMemo(() => count() * 2);
+
+// Effect - automatically tracks count() dependency
+createEffect(() => {
+  console.log(`Count is: ${count()}`);
+});
+```
+
+**Key differences:**
+- **Read**: `count()` not `count.value`
+- **Write**: `setCount(x)` not `count.value = x`
+- **Auto-tracking**: Effects automatically track which signals are read
+
+**Comparison with other approaches:**
+
+| Feature | Vue 3 ref | Proxy | Signal |
+|---------|-----------|-------|--------|
+| Read | `counter.value` | `state.counter` | `counter()` |
+| Write | `counter.value = x` | `state.counter = x` | `setCounter(x)` |
+| Multi-property | One ref per value | ✅ Object | One signal per value |
+| TypeScript | Good | Good | Excellent |
+| Framework | Vue 3 | Vue 3 | Solid.js, Preact |
 
 ## 🔍 Understanding Fine-grained Reactivity
 
@@ -138,7 +179,7 @@ reactivity-vue3/
 │       ├── 03-proxy_02.js      (ref() implementation)
 │       ├── 03-proxy_03.js      (Vue 3 ref from CDN)
 │       ├── 03-proxy_04.js      (Fine-grained reactivity)
-│       └── 04-signal.js
+│       └── 04-signals.js       (Signal-based reactivity)
 ```
 
 ## ➕ Adding New Examples

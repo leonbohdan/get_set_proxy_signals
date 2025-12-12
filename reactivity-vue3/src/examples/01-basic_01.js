@@ -7,7 +7,7 @@
  */
 
 export function init(counterButton, resetButton) {
-  let counter = 0;
+  let counter = 5;
 
   function isCounterTooBig() {
     return counter > 10;

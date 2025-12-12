@@ -69,7 +69,7 @@ export function init(counterButton, resetButton) {
   }
 
   // Create reactive ref
-  const counter = ref(0);
+  const counter = ref(5);
 
   function isCounterTooBig() {
     return counter.value > 10;

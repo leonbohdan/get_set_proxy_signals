@@ -17,7 +17,7 @@ export function init(counterButton, resetButton) {
   console.log('%c🚀 Fine-grained Reactivity Example Started', 'color: #4CAF50; font-weight: bold; font-size: 14px;');
   console.log('%c📊 Watch console to see which parts update', 'color: #2196F3; font-size: 12px;');
 
-  const counterState = ref(0);
+  const counterState = ref(5);
   
   const isCounterTooBig = computed(() => counterState.value > 10);
 

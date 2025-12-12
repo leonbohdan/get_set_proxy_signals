@@ -17,7 +17,7 @@ export function init(counterButton, resetButton) {
   }
 
   const counterState = {
-    _value: 0,
+    _value: 5,
 
     get value() {
       return this._value;

@@ -6,7 +6,7 @@ import * as example03_01 from './examples/03-proxy_01.js';
 import * as example03_02 from './examples/03-proxy_02.js';
 import * as example03_03 from './examples/03-proxy_03.js';
 import * as example03_04 from './examples/03-proxy_04.js';
-import * as example04 from './examples/04-signal.js';
+import * as example04 from './examples/04-signals.js';
 
 const counterButton = document.querySelector('button#counter');
 const resetButton = document.querySelector('button#reset');
